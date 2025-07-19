@@ -20,7 +20,9 @@
     <meta name="theme-color" content="#ffffff">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> KALIYUGAM </title>
+    <title>KALIYUGAM MC | Indian Minecraft Server</title>
+    <meta name="description" content="Join KALIYUGAM MC - India's best Minecraft server with Lifesteal SMP, Towny Wars, and daily rewards! Play now at play.kymc.xyz">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -88,15 +90,10 @@
             to { text-shadow: 0 0 20px rgba(255, 107, 53, 0.8); }
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
-            to { text-shadow: 0 0 20px rgba(0, 255, 136, 0.8); }
-        }
-
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .nav-links a {
@@ -107,12 +104,199 @@
             position: relative;
             padding: 0.5rem 1rem;
             border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a i {
+            font-size: 1.1rem;
         }
 
         .nav-links a:hover {
             color: #00ff88;
             background: rgba(0, 255, 136, 0.1);
             transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            color: #00ff88;
+            border-bottom: 2px solid #00ff88;
+        }
+
+        /* Daily Rewards Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .daily-rewards-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .daily-rewards-modal {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #ff6b35;
+        }
+
+        .rewards-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #00ff88;
+            font-size: 1.8rem;
+        }
+
+        .rewards-subtitle {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .rewards-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .reward-day {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid transparent;
+        }
+
+        .reward-day.claimed {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+        }
+
+        .reward-day.today:not(.claimed) {
+            animation: pulse 2s infinite;
+            border-color: #ff6b35;
+        }
+
+        .reward-day .day-number {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .reward-day .reward-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            color: #00d4ff;
+        }
+
+        .reward-day .reward-amount {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .reward-day .checkmark {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #00ff88;
+            color: #000;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .claim-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .claim-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .claim-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .streak-count {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .streak-count span {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
         }
 
         /* Hero Section */
@@ -124,6 +308,7 @@
             text-align: center;
             position: relative;
             background: linear-gradient(45deg, rgba(0, 255, 136, 0.1), rgba(26, 26, 46, 0.9));
+            padding-top: 80px;
         }
 
         .hero-content {
@@ -159,11 +344,6 @@
             animation: pulse 3s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.3); }
-            50% { box-shadow: 0 0 50px rgba(0, 255, 136, 0.6); }
-        }
-
         .status-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -177,6 +357,7 @@
             background: rgba(0, 255, 136, 0.1);
             border-radius: 10px;
             transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
         .status-item:hover {
@@ -339,115 +520,6 @@
             margin: 1rem 0;
         }
 
-        /* Paid Advertisement Sections */
-        .ad-banner {
-            background: linear-gradient(135deg, #ff6b35, #f7931e);
-            border: 2px solid #ff6b35;
-            border-radius: 15px;
-            padding: 1rem;
-            margin: 2rem 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ad-banner::before {
-            content: 'SPONSORED';
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
-
-        .ad-slot {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #ff6b35;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 1rem 0;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ad-slot::before {
-            content: 'Advertisement Space Available';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 107, 53, 0.9);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .ad-slot:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-        }
-
-        .ad-pricing {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #ff6b35;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            text-align: center;
-        }
-
-        .ad-pricing h4 {
-            color: #ff6b35;
-            margin-bottom: 0.5rem;
-        }
-
-        .leaderboard-ad {
-            width: 100%;
-            height: 90px;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1rem 0;
-            position: relative;
-        }
-
-        .sidebar-ad {
-            width: 300px;
-            height: 250px;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1rem 0;
-            position: relative;
-        }
-
-        .square-ad {
-            width: 250px;
-            height: 250px;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1rem auto;
-            position: relative;
-        }
-
         /* Footer */
         footer {
             background: rgba(0, 0, 0, 0.9);
@@ -509,21 +581,70 @@
             .status-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .rewards-calendar {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rewards-calendar {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#00ff88, #00d4ff);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(#00d4ff, #00ff88);
         }
     </style>
 </head>
 <body>
     <div class="bg-animation"></div>
     
+    <!-- Daily Rewards Modal -->
+    <div class="modal-overlay" id="rewardsModal">
+        <div class="daily-rewards-modal">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h2 class="rewards-title"><i class="fas fa-gift"></i> Daily Rewards</h2>
+            <p class="rewards-subtitle">Login daily to claim awesome rewards!</p>
+            
+            <div class="rewards-calendar" id="rewardsCalendar">
+                <!-- Days will be populated by JavaScript -->
+            </div>
+            
+            <button class="claim-button" id="claimButton" disabled>
+                <i class="fas fa-gift"></i> Claim Your Reward
+            </button>
+            
+            <div class="streak-count" id="streakCount">
+                Current streak: <span id="currentStreak">0</span> days | Longest streak: <span id="longestStreak">0</span> days
+            </div>
+        </div>
+    </div>
+    
     <header>
         <nav>
             <a href="#" class="logo">⚔️ KALIYUGAM MC</a>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#store">Store</a></li>
-                <li><a href="#discord">Discord</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
+                <li><a href="#store"><i class="fas fa-shopping-cart"></i> Store</a></li>
+                <li><a href="#discord"><i class="fab fa-discord"></i> Discord</a></li>
+                <li><a href="#" id="rewardsLink"><i class="fas fa-gift"></i> Daily Rewards</a></li>
             </ul>
         </nav>
     </header>
@@ -536,13 +657,13 @@
             <div class="server-status">
                 <h3>🟢 Server Status: <span style="color: #00ff88;">ONLINE</span></h3>
                 <div class="status-grid">
+                    <div class="status-item" onclick="copyToClipboard('play.kymc.xyz:6000')">
+                        <span class="status-value">play.kymc.xyz:6000</span>
+                        <span>Click to Copy IP</span>
+                    </div>
                     <div class="status-item">
                         <span class="status-value" id="player-count">127</span>
                         <span>Players Online</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-value">play.kymc.xyz:6000</span>
-                        <span>Server IP</span>
                     </div>
                     <div class="status-item">
                         <span class="status-value">1.21.4</span>
@@ -556,67 +677,55 @@
             </div>
 
             <div class="cta-buttons">
-                <a href="#" class="btn btn-primary">Join Server</a>
-                <a href="#discord" class="btn btn-secondary">Join Discord</a>
+                <a href="minecraft://?addServer=play.kymc.xyz:6000" class="btn btn-primary">
+                    <i class="fas fa-gamepad"></i> Direct Connect
+                </a>
+                <a href="https://discord.gg/KjJ5u6b6ND" target="_blank" class="btn btn-secondary">
+                    <i class="fab fa-discord"></i> Join Discord
+                </a>
             </div>
         </div>
     </section>
 
     <section class="section" id="features">
-        <h2>🎯 Server Features</h2>
-        
-        <!-- Top Leaderboard Ad -->
-        <div class="leaderboard-ad">
-            <div style="color: white; font-weight: bold;">
-                <div style="font-size: 0.8rem; margin-bottom: 5px;">ADVERTISEMENT</div>
-                <div>728x90 Leaderboard Ad Space - ₹200/month</div>
-            </div>
-        </div>
+        <h2><i class="fas fa-star"></i> Server Features</h2>
         
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">🏛️</div>
+                <div class="feature-icon"><i class="fas fa-heart"></i></div>
                 <h3>Lifesteal SMP</h3>
                 <p>Gain hearts by defeating players and lose hearts when you die. Survival of the fittest!</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">💰</div>
+                <div class="feature-icon"><i class="fas fa-coins"></i></div>
                 <h3>Economy System</h3>
                 <p>Buy, sell, and trade items with our advanced economy. Create shops and become wealthy!</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🏰</div>
+                <div class="feature-icon"><i class="fas fa-city"></i></div>
                 <h3>Towny Wars</h3>
                 <p>Build your town, recruit residents, and engage in epic wars with other towns!</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">⚔️</div>
+                <div class="feature-icon"><i class="fas fa-magic"></i></div>
                 <h3>Custom Enchants</h3>
                 <p>Discover over 100+ custom enchantments to make your gear truly powerful!</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🎁</div>
+                <div class="feature-icon"><i class="fas fa-gift"></i></div>
                 <h3>Crates & Rewards</h3>
                 <p>Open mystery crates and vote daily for amazing rewards and rare items!</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🔥</div>
+                <div class="feature-icon"><i class="fas fa-dragon"></i></div>
                 <h3>Boss Battles</h3>
                 <p>Fight custom bosses with unique abilities and claim legendary loot!</p>
-            </div>
-        </div>
-        
-        <!-- Square Ad after features -->
-        <div class="square-ad">
-            <div style="color: white; font-weight: bold; text-align: center;">
-                <div style="font-size: 0.8rem; margin-bottom: 5px;">SPONSORED</div>
-                <div>250x250 Square Ad - ₹60/month</div>
             </div>
         </div>
     </section>
 
     <section class="section" id="discord">
-        <h2>💬 Discord Community</h2>
+        <h2><i class="fab fa-discord"></i> Discord Community</h2>
         <div class="discord-widget">
             <h3>Join Our Discord Community!</h3>
             <p>Connect with fellow Indian Minecraft players, get support, and participate in events!</p>
@@ -636,156 +745,52 @@
                 </div>
             </div>
             
-            <a href="#" class="btn btn-primary" style="background: #5865f2; color: white; margin-top: 1rem;">
-                Join Discord Server
+            <a href="https://discord.gg/KjJ5u6b6ND" target="_blank" class="btn btn-primary" style="background: #5865f2; color: white; margin-top: 1rem;">
+                <i class="fab fa-discord"></i> Join Discord Server
             </a>
-        </div>
-        
-        <!-- Additional server info -->
-        <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-            <div style="background: rgba(0, 0, 0, 0.7); padding: 1.5rem; border-radius: 10px; border: 1px solid #ff6b35;">
-                <h4 style="color: #ff6b35; margin-bottom: 1rem;">🏆 Leaderboards</h4>
-                <div style="font-size: 0.9rem;">
-                    <div>💰 soon</div>
-                    <div>⚔️ soon</div>
-                    <div>🏠 soon</div>
-                </div>
-            </div>
-            <div style="background: rgba(0, 0, 0, 0.7); padding: 1.5rem; border-radius: 10px; border: 1px solid #ff6b35;">
-                <h4 style="color: #ff6b35; margin-bottom: 1rem;">📅 Events</h4>
-                <div style="font-size: 0.9rem;">
-                    <div>🎪 Weekend PvP Tournament</div>
-                    <div>🎁 Daily Vote Rewards</div>
-                    <div>🏆 Monthly Building Contest</div>
-                    <div> all events coming soon</div>
-                </div>
-            </div>
         </div>
     </section>
 
     <section class="section" id="store">
-        <h2>💰 Server Store</h2>
-        
-        <!-- Sidebar Ad -->
-        <div style="display: flex; justify-content: center; margin: 2rem 0;">
-            <div class="sidebar-ad">
-                <div style="color: white; font-weight: bold; text-align: center;">
-                    <div style="font-size: 0.8rem; margin-bottom: 5px;">ADVERTISEMENT</div>
-                    <div>300x250 Sidebar Ad - ₹100/month</div>
-                </div>
-            </div>
-        </div>
+        <h2><i class="fas fa-shopping-cart"></i> Server Store</h2>
         
         <div class="store-grid">
             <div class="store-item">
-                <h3>🌟 VIP Rank</h3>
+                <h3><i class="fas fa-crown"></i> VIP Rank</h3>
                 <div class="price">₹299</div>
                 <ul style="text-align: left; margin: 1rem 0;">
-                    <li>✅ Colored Name & Chat</li>
-                    <li>✅ /kit vip (Daily)</li>
-                    <li>✅ Extra Homes (10)</li>
-                    <li>✅ VIP Tag</li>
-                    <li>✅ Priority Support</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> Colored Name & Chat</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> /kit vip (Daily)</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> Extra Homes (10)</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> VIP Tag</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> Priority Support</li>
                 </ul>
-                <a href="#" class="btn btn-primary">Purchase Now</a>
+                <a href="#" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Purchase Now</a>
             </div>
             <div class="store-item">
-                <h3>👑 MVP Rank</h3>
+                <h3><i class="fas fa-gem"></i> MVP Rank</h3>
                 <div class="price">₹599</div>
                 <ul style="text-align: left; margin: 1rem 0;">
-                    <li>✅ All VIP Perks</li>
-                    <li>✅ /fly in spawn</li>
-                    <li>✅ /kit mvp (Daily)</li>
-                    <li>✅ Extra Homes (25)</li>
-                    <li>✅ MVP Tag & Prefix</li>
-                    <li>✅ Custom Join Message</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> All VIP Perks</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> /fly in spawn</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> /kit mvp (Daily)</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> Extra Homes (25)</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> MVP Tag & Prefix</li>
                 </ul>
-                <a href="#" class="btn btn-primary">Purchase Now</a>
+                <a href="#" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Purchase Now</a>
             </div>
             <div class="store-item">
-                <h3>⚡ LEGEND Rank</h3>
+                <h3><i class="fas fa-dragon"></i> LEGEND Rank</h3>
                 <div class="price">₹999</div>
                 <ul style="text-align: left; margin: 1rem 0;">
-                    <li>✅ All MVP Perks</li>
-                    <li>✅ /kit legend (Daily)</li>
-                    <li>✅ Unlimited Homes</li>
-                    <li>✅ Custom Particles</li>
-                    <li>✅ WorldEdit Access</li>
-                    <li>✅ Exclusive Discord Role</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> All MVP Perks</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> /kit legend (Daily)</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> Unlimited Homes</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> Custom Particles</li>
+                    <li><i class="fas fa-check" style="color: #00ff88;"></i> WorldEdit Access</li>
                 </ul>
-                <a href="#" class="btn btn-primary">Purchase Now</a>
+                <a href="#" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Purchase Now</a>
             </div>
-        </div>
-        
-        <!-- Additional Items -->
-        <h3 style="text-align: center; margin-top: 3rem; color: #ff6b35;">🎁 Special Items</h3>
-        <div class="store-grid">
-            <div class="store-item">
-                <h3>💎 Legendary Crate</h3>
-                <div class="price">₹149</div>
-                <p>Contains rare items, custom enchants, and exclusive rewards!</p>
-                <a href="#" class="btn btn-primary">Buy Crate</a>
-            </div>
-            <div class="store-item">
-                <h3>🗡️ Custom Sword</h3>
-                <div class="price">₹199</div>
-                <p>Powerful custom enchanted sword with unique abilities!</p>
-                <a href="#" class="btn btn-primary">Buy Sword</a>
-            </div>
-            <div class="store-item">
-                <h3>🏠 Plot World</h3>
-                <div class="price">₹99</div>
-                <p>Get your own 100x100 plot in the creative world!</p>
-                <a href="#" class="btn btn-primary">Buy Plot</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Advertisement Revenue Section -->
-    <section class="section">
-        <div class="ad-banner">
-            <h2>💰 Advertise with KALIYUGAM MC</h2>
-            <p>Reach thousands of active Minecraft players daily!</p>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0;">
-                <div class="ad-pricing">
-                    <h4>Banner Ads</h4>
-                    <p>728x90 pixels</p>
-                    <div style="color: #ff6b35; font-weight: bold; font-size: 1.2rem;">₹200/month</div>
-                </div>
-                <div class="ad-pricing">
-                    <h4>Sidebar Ads</h4>
-                    <p>300x250 pixels</p>
-                    <div style="color: #ff6b35; font-weight: bold; font-size: 1.2rem;">₹100/month</div>
-                </div>
-                <div class="ad-pricing">
-                    <h4>Square Ads</h4>
-                    <p>250x250 pixels</p>
-                    <div style="color: #ff6b35; font-weight: bold; font-size: 1.2rem;">₹60/month</div>
-                </div>
-            </div>
-            
-            <div style="background: rgba(0, 0, 0, 0.7); padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                <h4>📊 Our Stats:</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div>
-                        <div style="font-size: 1.5rem; color: #ff6b35; font-weight: bold;">5,000+</div>
-                        <div>Monthly Visitors</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 1.5rem; color: #ff6b35; font-weight: bold;">200+</div>
-                        <div>Daily Players</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 1.5rem; color: #ff6b35; font-weight: bold;">400+</div>
-                        <div>Discord Members</div>
-                    </div>
-                </div>
-            </div>
-            
-            <a href="#contact" class="btn btn-primary" style="background: white; color: #ff6b35; border: 2px solid #ff6b35;">
-                Contact for Advertising
-            </a>
         </div>
     </section>
 
@@ -802,12 +807,221 @@
             </div>
             <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
                 <p>🌟 Premium Indian Minecraft Experience | 🎮 Lifesteal SMP | 💰 Economy | 🏰 Towny Wars</p>
-                <p>Contact: support@kymc.xyz| Advertising: ads@kymc.xyz</p>
+                <p>Contact: support@kymc.xyz | Advertising: ads@kymc.xyz</p>
             </div>
         </div>
     </footer>
 
     <script>
+        // Daily Rewards System
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if rewards modal should be shown
+            checkDailyReward();
+            
+            // Setup modal toggle
+            const rewardsLink = document.getElementById('rewardsLink');
+            const rewardsModal = document.getElementById('rewardsModal');
+            const closeModal = document.getElementById('closeModal');
+            
+            rewardsLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                rewardsModal.classList.add('active');
+            });
+            
+            closeModal.addEventListener('click', function() {
+                rewardsModal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            rewardsModal.addEventListener('click', function(e) {
+                if (e.target === rewardsModal) {
+                    rewardsModal.classList.remove('active');
+                }
+            });
+            
+            // Initialize rewards calendar
+            setupRewardsCalendar();
+        });
+
+        function checkDailyReward() {
+            const today = new Date().toDateString();
+            const lastClaim = localStorage.getItem('lastRewardClaim');
+            const shouldShowModal = today !== lastClaim;
+            
+            if (shouldShowModal) {
+                setTimeout(() => {
+                    document.getElementById('rewardsModal').classList.add('active');
+                }, 3000); // Show after 3 seconds
+            }
+        }
+
+        function setupRewardsCalendar() {
+            const rewardsCalendar = document.getElementById('rewardsCalendar');
+            const claimButton = document.getElementById('claimButton');
+            const today = new Date();
+            const currentDay = today.getDate();
+            const lastClaimDate = localStorage.getItem('lastRewardClaimDate');
+            const currentStreak = parseInt(localStorage.getItem('rewardStreak') || 0;
+            const longestStreak = parseInt(localStorage.getItem('longestRewardStreak') || 0;
+            
+            // Update streak display
+            document.getElementById('currentStreak').textContent = currentStreak;
+            document.getElementById('longestStreak').textContent = longestStreak;
+            
+            // Generate rewards calendar
+            rewardsCalendar.innerHTML = '';
+            
+            // Define rewards for each day (can be customized)
+            const dailyRewards = [
+                { icon: 'fas fa-coins', amount: '100 Coins' },
+                { icon: 'fas fa-gem', amount: '1 Rare Gem' },
+                { icon: 'fas fa-key', amount: 'Common Crate Key' },
+                { icon: 'fas fa-coins', amount: '150 Coins' },
+                { icon: 'fas fa-heart', amount: '1 Extra Heart' },
+                { icon: 'fas fa-key', amount: 'Rare Crate Key' },
+                { icon: 'fas fa-trophy', amount: 'Legendary Reward!' }
+            ];
+            
+            for (let day = 1; day <= 7; day++) {
+                const rewardDay = document.createElement('div');
+                rewardDay.className = 'reward-day';
+                if (day < currentDay) rewardDay.classList.add('claimed');
+                if (day === currentDay) rewardDay.classList.add('today');
+                
+                rewardDay.innerHTML = `
+                    <div class="day-number">Day ${day}</div>
+                    <div class="reward-icon"><i class="${dailyRewards[day-1].icon}"></i></div>
+                    <div class="reward-amount">${dailyRewards[day-1].amount}</div>
+                    ${day < currentDay ? '<div class="checkmark">✓</div>' : ''}
+                `;
+                
+                rewardsCalendar.appendChild(rewardDay);
+            }
+            
+            // Check if today's reward was already claimed
+            const todayClaimed = localStorage.getItem('lastRewardClaim') === today.toDateString();
+            
+            if (todayClaimed) {
+                claimButton.disabled = true;
+                claimButton.innerHTML = '<i class="fas fa-check"></i> Already Claimed Today';
+            } else {
+                claimButton.disabled = false;
+                claimButton.innerHTML = '<i class="fas fa-gift"></i> Claim Your Reward';
+                
+                claimButton.addEventListener('click', function() {
+                    // Claim the reward
+                    claimDailyReward(currentDay, currentStreak, longestStreak);
+                });
+            }
+        }
+
+        function claimDailyReward(currentDay, currentStreak, longestStreak) {
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            const lastClaimDate = localStorage.getItem('lastRewardClaimDate');
+            const lastClaim = new Date(lastClaimDate);
+            
+            // Check if this is consecutive day
+            let newStreak = currentStreak;
+            if (lastClaimDate && (lastClaim.toDateString() === yesterday.toDateString() || 
+                                 (lastClaim.toDateString() === today.toDateString() && currentStreak === 0))) {
+                newStreak = currentStreak + 1;
+            } else if (!lastClaimDate || lastClaim.toDateString() !== today.toDateString()) {
+                newStreak = 1;
+            }
+            
+            // Update streaks
+            localStorage.setItem('rewardStreak', newStreak);
+            if (newStreak > longestStreak) {
+                localStorage.setItem('longestRewardStreak', newStreak);
+            }
+            
+            // Save claim date
+            localStorage.setItem('lastRewardClaim', today.toDateString());
+            localStorage.setItem('lastRewardClaimDate', today.toString());
+            
+            // Show reward claimed
+            const claimButton = document.getElementById('claimButton');
+            claimButton.disabled = true;
+            claimButton.innerHTML = '<i class="fas fa-check"></i> Reward Claimed!';
+            
+            // Update calendar display
+            document.querySelector('.reward-day.today').classList.add('claimed');
+            document.querySelector('.reward-day.today').innerHTML += '<div class="checkmark">✓</div>';
+            
+            // Update streak display
+            document.getElementById('currentStreak').textContent = newStreak;
+            if (newStreak > longestStreak) {
+                document.getElementById('longestStreak').textContent = newStreak;
+            }
+            
+            // Show reward notification
+            showRewardNotification(currentDay);
+        }
+
+        function showRewardNotification(day) {
+            // Define rewards for each day (same as in calendar)
+            const dailyRewards = [
+                { icon: 'fas fa-coins', amount: '100 Coins' },
+                { icon: 'fas fa-gem', amount: '1 Rare Gem' },
+                { icon: 'fas fa-key', amount: 'Common Crate Key' },
+                { icon: 'fas fa-coins', amount: '150 Coins' },
+                { icon: 'fas fa-heart', amount: '1 Extra Heart' },
+                { icon: 'fas fa-key', amount: 'Rare Crate Key' },
+                { icon: 'fas fa-trophy', amount: 'Legendary Reward!' }
+            ];
+            
+            const reward = dailyRewards[day-1];
+            
+            // Create notification
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.background = 'linear-gradient(45deg, #1a1a2e, #16213e)';
+            notification.style.color = '#fff';
+            notification.style.padding = '15px 20px';
+            notification.style.borderRadius = '10px';
+            notification.style.borderLeft = '5px solid #00ff88';
+            notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+            notification.style.zIndex = '1000';
+            notification.style.display = 'flex';
+            notification.style.alignItems = 'center';
+            notification.style.gap = '10px';
+            notification.style.animation = 'fadeInUp 0.5s ease';
+            
+            notification.innerHTML = `
+                <i class="${reward.icon}" style="font-size: 1.5rem; color: #00ff88;"></i>
+                <div>
+                    <div style="font-weight: bold;">Daily Reward Claimed!</div>
+                    <div style="font-size: 0.9rem;">Day ${day}: ${reward.amount}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.5s ease';
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Server IP copy function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = event.target.innerHTML;
+                event.target.innerHTML = '<span class="status-value" style="color: #ff6b35;">Copied!</span>';
+                setTimeout(() => {
+                    event.target.innerHTML = original;
+                }, 2000);
+            });
+        }
+
         // Real-time player count simulation
         function updatePlayerCount() {
             const playerCountElement = document.getElementById('player-count');
@@ -830,70 +1044,35 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
                 }
             });
         });
 
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+        // Set active nav link based on scroll position
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section');
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (pageYOffset >= sectionTop) {
+                    currentSection = section.getAttribute('id');
                 }
             });
-        }, observerOptions);
-
-        document.querySelectorAll('.feature-card, .store-item').forEach(card => {
-            observer.observe(card);
-        });
-
-        // Copy server IP functionality
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.status-item') && e.target.closest('.status-item').textContent.includes('play.kymc.xyz:6000')) {
-                navigator.clipboard.writeText('play.kymc.xyz:6000').then(() => {
-                    const original = e.target.closest('.status-item').innerHTML;
-                    e.target.closest('.status-item').innerHTML = '<span class="status-value" style="color: #ff6b35;">IP Copied!</span><span>Server IP</span>';
-                    setTimeout(() => {
-                        e.target.closest('.status-item').innerHTML = original;
-                    }, 2000);
-                });
-            }
-        });
-
-        // Particle effect
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.style.position = 'fixed';
-            particle.style.width = '4px';
-            particle.style.height = '4px';
-            particle.style.background = '#00ff88';
-            particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
-            particle.style.opacity = '0.7';
-            particle.style.left = Math.random() * window.innerWidth + 'px';
-            particle.style.top = window.innerHeight + 'px';
-            particle.style.zIndex = '1';
             
-            document.body.appendChild(particle);
-            
-            const animation = particle.animate([
-                { transform: 'translateY(0px)', opacity: 0.7 },
-                { transform: 'translateY(-' + (window.innerHeight + 100) + 'px)', opacity: 0 }
-            ], {
-                duration: 3000 + Math.random() * 2000,
-                easing: 'linear'
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
             });
-            
-            animation.onfinish = () => particle.remove();
-        }
-
-        // Create particles periodically
-        setInterval(createParticle, 300);
+        });
     </script>
 </body>
 </html>
